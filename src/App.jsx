@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./index.css";
+
+const publicImage = (fileName) => `${import.meta.env.BASE_URL}images/${fileName}`;
+const CHIANG_MAI_MAP_URL = "https://maps.app.goo.gl/iW2dmpYi4a5j6oCK7";
 
 const ATTRACTIONS = [
   {
     id: 1,
     title: "Wat Phra That Doi Suthep",
     category: "Temple & History",
-    image: "/images/chiangmai_temple_1777084912261.png",
+    image: publicImage("chiangmai_temple_1777084912261.png"),
     link: "https://maps.app.goo.gl/undE78vDXdZhBA1D8",
     description:
       "A majestic golden temple overlooking the city from the mountains.",
@@ -93,7 +96,7 @@ const ATTRACTIONS = [
     id: 10,
     title: "Elephant Discovery Chiang Mai",
     category: "Nature & Wildlife",
-    image: "/images/chiangmai_elephant_1777084941518.png",
+    image: publicImage("chiangmai_elephant_1777084941518.png"),
     link: "https://maps.app.goo.gl/SbATPMA1oWpaA6oC8",
     description:
       "An ethical elephant sanctuary for a memorable wildlife experience.",
@@ -144,7 +147,8 @@ const RELAXATION = [
     id: 15,
     title: "Hannah Organic (大麻店)",
     category: "Weed Shop",
-    image: "https://images.unsplash.com/photo-1603503362143-6c70135d97f8?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1603503362143-6c70135d97f8?q=80&w=800&auto=format&fit=crop",
     link: "https://maps.app.goo.gl/HDs82ruJuCUzNqLc6",
     description: "Premium organic weed shop.",
   },
@@ -152,14 +156,78 @@ const RELAXATION = [
     id: 16,
     title: "Sum Bamboo Massage (按摩)",
     category: "Massage & Spa",
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800&auto=format&fit=crop",
     link: "https://maps.app.goo.gl/AvfdRKAoxWMuCguQ9",
     description: "Relaxing massage to soothe your body after a long day.",
-  }
+  },
 ];
 
+const TAB_CONFIG = [
+  {
+    id: "attractions",
+    label: "Top Attractions",
+    title: "Top Attractions",
+    items: ATTRACTIONS,
+  },
+  {
+    id: "food",
+    label: "Food & Drinks",
+    title: "Food & Drinks",
+    items: FOOD_DRINKS,
+  },
+  {
+    id: "relaxation",
+    label: "Relaxation",
+    title: "Relaxation & Wellness",
+    items: RELAXATION,
+  },
+];
+
+const TAB_ALIASES = {
+  attractions: "attractions",
+  attraction: "attractions",
+  top: "attractions",
+  food: "food",
+  foods: "food",
+  drinks: "food",
+  "food-drinks": "food",
+  food_drinks: "food",
+  relaxation: "relaxation",
+  relax: "relaxation",
+  spa: "relaxation",
+};
+
+const normalizeTabValue = (value) => {
+  if (!value) return "";
+
+  try {
+    return decodeURIComponent(value).trim().toLowerCase().replace(/^#|^\//, "");
+  } catch {
+    return value.trim().toLowerCase().replace(/^#|^\//, "");
+  }
+};
+
+const getTabFromValue = (value) => TAB_ALIASES[normalizeTabValue(value)] || "";
+
+const getInitialTab = () => {
+  if (typeof window === "undefined") return "attractions";
+
+  const params = new URLSearchParams(window.location.search);
+  const requestedValues = [
+    params.get("tab"),
+    params.get("view"),
+    params.get("category"),
+    params.get("list"),
+    window.location.hash,
+    ...window.location.pathname.split("/").filter(Boolean),
+  ];
+
+  return requestedValues.map(getTabFromValue).find(Boolean) || "attractions";
+};
+
 const MUST_EATS = [
-  { name: "Pho (河粉)", icon: "🍜" },
+  { name: "Pad Thai (泰式炒河粉)", icon: "🍜" },
   { name: "Pad Krapow (打拋豬)", icon: "🍛" },
   { name: "Thai Milk Tea (泰奶)", icon: "🧋" },
   { name: "Khao Soi (咖哩麵)", icon: "🍲" },
@@ -168,7 +236,7 @@ const MUST_EATS = [
 
 const getGoogleMapsUrl = (query) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    `${query} Chiang Mai Thailand`
+    `${query} Chiang Mai Thailand`,
   )}`;
 
 const Card = ({ item }) => (
@@ -180,13 +248,33 @@ const Card = ({ item }) => (
     <div className="card-content">
       <h3 className="card-title">{item.title}</h3>
       <p className="card-description">{item.description}</p>
-      <div className="card-footer" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+      <div
+        className="card-footer"
+        style={{
+          display: "flex",
+          gap: "10px",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+        }}
+      >
         {item.ytLink && (
-          <a href={item.ytLink} target="_blank" rel="noopener noreferrer" className="view-yt" style={{ textDecoration: 'none' }}>
+          <a
+            href={item.ytLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="view-yt"
+            style={{ textDecoration: "none" }}
+          >
             看影片 🎥
           </a>
         )}
-        <a href={getGoogleMapsUrl(item.title)} target="_blank" rel="noopener noreferrer" className="view-map" style={{ textDecoration: 'none' }}>
+        <a
+          href={getGoogleMapsUrl(item.title)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="view-map"
+          style={{ textDecoration: "none" }}
+        >
           看地圖 📍
         </a>
       </div>
@@ -195,7 +283,16 @@ const Card = ({ item }) => (
 );
 
 function App() {
-  const [activeTab, setActiveTab] = useState('attractions');
+  const [activeTab, setActiveTab] = useState(getInitialTab);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", tabId);
+    url.hash = "";
+    window.history.replaceState(null, "", url);
+  };
 
   return (
     <div className="app-container">
@@ -205,7 +302,7 @@ function App() {
           <p className="hero-subtitle">
             Discover the magic of Northern Thailand
           </p>
-          <a href={getGoogleMapsUrl("Chiang Mai")} target="_blank" rel="noopener noreferrer" className="hero-btn">
+          <a href={CHIANG_MAI_MAP_URL} className="hero-btn">
             🌍 開啟 Chiang Mai 地圖
           </a>
         </div>
@@ -213,43 +310,34 @@ function App() {
 
       <main className="main-content">
         <div className="tabs-container">
-          <button className={`tab-btn ${activeTab === 'attractions' ? 'active' : ''}`} onClick={() => setActiveTab('attractions')}>Top Attractions</button>
-          <button className={`tab-btn ${activeTab === 'food' ? 'active' : ''}`} onClick={() => setActiveTab('food')}>Food & Drinks</button>
-          <button className={`tab-btn ${activeTab === 'relaxation' ? 'active' : ''}`} onClick={() => setActiveTab('relaxation')}>Relaxation</button>
+          {TAB_CONFIG.map((tab) => (
+            <button
+              key={tab.id}
+              className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
+              onClick={() => handleTabChange(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        <div className={`tab-content ${activeTab === 'attractions' ? 'active' : ''}`}>
-          <section className="section">
-            <h2 className="section-title">Top Attractions</h2>
-            <div className="card-grid">
-              {ATTRACTIONS.map((item) => (
-                <Card key={item.id} item={item} />
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className={`tab-content ${activeTab === 'food' ? 'active' : ''}`}>
-          <section className="section">
-            <h2 className="section-title">Food & Drinks</h2>
-            <div className="card-grid">
-              {FOOD_DRINKS.map((item) => (
-                <Card key={item.id} item={item} />
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className={`tab-content ${activeTab === 'relaxation' ? 'active' : ''}`}>
-          <section className="section">
-            <h2 className="section-title">Relaxation & Wellness</h2>
-            <div className="card-grid">
-              {RELAXATION.map((item) => (
-                <Card key={item.id} item={item} />
-              ))}
-            </div>
-          </section>
-        </div>
+        {TAB_CONFIG.map((tab) => (
+          <div
+            key={tab.id}
+            className={`tab-content category-tab ${
+              activeTab === tab.id ? "active" : ""
+            }`}
+          >
+            <section className="section">
+              <h2 className="section-title">{tab.title}</h2>
+              <div className="card-grid">
+                {tab.items.map((item) => (
+                  <Card key={`${tab.id}-${item.id}`} item={item} />
+                ))}
+              </div>
+            </section>
+          </div>
+        ))}
 
         <section className="section must-eat-section">
           <h2 className="section-title">Must Eat in Chiang Mai</h2>

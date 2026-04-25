@@ -410,8 +410,8 @@ h1, h2, h3, h4 {
     padding: 0.3rem 0.8rem;
   }
   
-  /* Hide section titles for tabs, except MUST EATS */
-  .tab-content .section-title {
+  /* Hide repeated category headings in single-category mobile tabs. */
+  .tab-content.category-tab .section-title {
     display: none;
   }
   .must-eat-section {
