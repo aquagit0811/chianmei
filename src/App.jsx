@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 
 const ATTRACTIONS = [
@@ -190,6 +190,8 @@ const Card = ({ item }) => (
 );
 
 function App() {
+  const [activeTab, setActiveTab] = useState('attractions');
+
   return (
     <div className="app-container">
       <header className="hero">
@@ -205,7 +207,46 @@ function App() {
       </header>
 
       <main className="main-content">
-        <section className="section">
+        <div className="tabs-container">
+          <button className={`tab-btn ${activeTab === 'attractions' ? 'active' : ''}`} onClick={() => setActiveTab('attractions')}>Top Attractions</button>
+          <button className={`tab-btn ${activeTab === 'food' ? 'active' : ''}`} onClick={() => setActiveTab('food')}>Food & Drinks</button>
+          <button className={`tab-btn ${activeTab === 'relaxation' ? 'active' : ''}`} onClick={() => setActiveTab('relaxation')}>Relaxation</button>
+        </div>
+
+        <div className={`tab-content ${activeTab === 'attractions' ? 'active' : ''}`}>
+          <section className="section">
+            <h2 className="section-title">Top Attractions</h2>
+            <div className="card-grid">
+              {ATTRACTIONS.map((item) => (
+                <Card key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className={`tab-content ${activeTab === 'food' ? 'active' : ''}`}>
+          <section className="section">
+            <h2 className="section-title">Food & Drinks</h2>
+            <div className="card-grid">
+              {FOOD_DRINKS.map((item) => (
+                <Card key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className={`tab-content ${activeTab === 'relaxation' ? 'active' : ''}`}>
+          <section className="section">
+            <h2 className="section-title">Relaxation & Wellness</h2>
+            <div className="card-grid">
+              {RELAXATION.map((item) => (
+                <Card key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <section className="section must-eat-section">
           <h2 className="section-title">Must Eat in Chiang Mai</h2>
           <div className="must-eats-grid">
             {MUST_EATS.map((eat, index) => (
@@ -213,33 +254,6 @@ function App() {
                 <span className="eat-icon">{eat.icon}</span>
                 <span className="eat-name">{eat.name}</span>
               </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="section">
-          <h2 className="section-title">Top Attractions</h2>
-          <div className="card-grid">
-            {ATTRACTIONS.map((item) => (
-              <Card key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
-
-        <section className="section">
-          <h2 className="section-title">Food & Drinks</h2>
-          <div className="card-grid">
-            {FOOD_DRINKS.map((item) => (
-              <Card key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
-
-        <section className="section">
-          <h2 className="section-title">Relaxation & Wellness</h2>
-          <div className="card-grid">
-            {RELAXATION.map((item) => (
-              <Card key={item.id} item={item} />
             ))}
           </div>
         </section>
