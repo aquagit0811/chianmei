@@ -166,6 +166,11 @@ const MUST_EATS = [
   { name: "Boat Noodles (船麵)", icon: "🥘" },
 ];
 
+const getGoogleMapsUrl = (query) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    `${query} Chiang Mai Thailand`
+  )}`;
+
 const Card = ({ item }) => (
   <div className="card">
     <div className="card-image-wrapper">
@@ -181,7 +186,7 @@ const Card = ({ item }) => (
             看影片 🎥
           </a>
         )}
-        <a href={item.link} target="_blank" rel="noopener noreferrer" className="view-map" style={{ textDecoration: 'none' }}>
+        <a href={getGoogleMapsUrl(item.title)} target="_blank" rel="noopener noreferrer" className="view-map" style={{ textDecoration: 'none' }}>
           看地圖 📍
         </a>
       </div>
@@ -200,8 +205,8 @@ function App() {
           <p className="hero-subtitle">
             Discover the magic of Northern Thailand
           </p>
-          <a href="https://maps.app.goo.gl/kk9t5EpRDQUJKtn97" target="_blank" rel="noopener noreferrer" className="hero-btn">
-            🌍 開啟完整 Google Maps 清單
+          <a href={getGoogleMapsUrl("Chiang Mai")} target="_blank" rel="noopener noreferrer" className="hero-btn">
+            🌍 開啟 Chiang Mai 地圖
           </a>
         </div>
       </header>
