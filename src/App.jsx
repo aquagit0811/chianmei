@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./index.css";
 
 const publicImage = (fileName) => `${import.meta.env.BASE_URL}images/${fileName}`;
-const CHIANG_MAI_MAP_URL = "https://maps.app.goo.gl/iW2dmpYi4a5j6oCK7";
+const CHIANG_MAI_MAP_URL = "https://www.google.com/maps/@/data=!3m1!4b1!4m3!11m2!2s18DzTjkSQlCdIYEppfsn1Q!3e3";
 
 const ATTRACTIONS = [
   {
